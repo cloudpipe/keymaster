@@ -1,2 +1,3 @@
 # keymaster
-:key: OpenSSL convenience scripts
+
+:key: *OpenSSL convenience scripts*
