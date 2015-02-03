@@ -18,9 +18,5 @@ generate_password()
 
 require_password()
 {
-  if [ ! -f ${PASSFILE} ]; then
-    generate_password
-  else
-    info "Using existing password."
-  fi
+  [ -f ${PASSFILE} ] || generate_password
 }

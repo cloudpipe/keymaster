@@ -4,6 +4,10 @@
 
 generate_ca_certificate()
 {
+  require_password
+
+  info "Generating a CA certificate."
+
   openssl genrsa -des3 \
     -passout ${PASSOPT} \
     -out ${CERTDIR}/ca-key.pem 2048
@@ -13,5 +17,12 @@ generate_ca_certificate()
     -passin ${PASSOPT} \
     -key ${CERTDIR}/ca-key.pem \
     -passout ${PASSOPT} \
-    -out ${CERTDIR}/ca.pem
+    -out ${CAFILE}
+
+  info "CA certificate generated."
+}
+
+require_ca_certificate()
+{
+  [ -f ${CAFILE} ] || generate_ca_certificate
 }
