@@ -1,0 +1,76 @@
+#!/bin/sh
+#
+# Generate a keypair, signed by a certificate authority.
+
+for SCRIPT in common/*.sh; do
+  source ${SCRIPT}
+done
+
+NAME=""
+PURPOSE=""
+HOSTNAME=""
+
+FAIL="false"
+
+while getopts ":n:p:h:" VARNAME; do
+  case ${VARNAME} in
+    n)
+      NAME="${OPTARG}"
+      ;;
+    p)
+      case ${OPTARG} in
+        client)
+          PURPOSE="client"
+          ;;
+        server)
+          PURPOSE="server"
+          ;;
+        *)
+          error 'Invalid purpose: must be "client" or "server".'
+          FAIL="true"
+          ;;
+      esac
+      ;;
+    h)
+      HOSTNAME="${OPTARG}"
+      ;;
+    \?)
+      error "Unrecognized option: -${OPTARG}"
+      FAIL="true"
+      ;;
+    :)
+      error "Option -${OPTARG} requires an argument."
+      FAIL="true"
+      ;;
+  esac
+done
+
+[ -z "${NAME}" ] && {
+  error "Missing required parameter: -n"
+  FAIL="true"
+}
+
+[ -z "${HOSTNAME}" ] && {
+  error "Missing required parameter: -h"
+  FAIL="true"
+}
+
+# Default to client.
+[ -z "${PURPOSE}" ] && PURPOSE="client"
+
+if [ "${FAIL}" = "true" ]; then
+  echo
+  echo "Usage: docker run [..] cloudpipe/keymaster signed-keypair -n NAME -h HOSTNAME [-p (client|server)]"
+  echo
+  echo "Generate a public certificate and private key signed by a private certificate authority."
+  echo
+  echo " -n NAME     Specify the name of the generated keypair. This is used for the filenames."
+  echo " -p PURPOSE  Indicate the purpose of the certificate. Must be either 'client' or 'server'."
+  echo "             Defaults to 'client'."
+  echo " -h HOSTNAME Specify the hostname for the generated certificate. This must match the"
+  echo "             hostname that you'll be using to connect to the server."
+
+  exit 1
+fi
+
+generate_keypair "${NAME}" "${PURPOSE}" "${HOSTNAME}"

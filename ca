@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Generate a certificate authority.
+
+set -o errexit
+
+for SCRIPT in common/*.sh; do
+  source ${SCRIPT}
+done
+
+generate_ca_certificate
