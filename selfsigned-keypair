@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+# Generate a self-signed keypair, independent of the generated CA.
+
+for SCRIPT in common/*.sh; do
+  source ${SCRIPT}
+done
+
+NAME=""
+
+FAIL="false"
+
+while getopts ":n:" VARNAME; do
+  case ${VARNAME} in
+    n)
+      NAME="${OPTARG}"
+      ;;
+    \?)
+      error "Unrecognized option: -${OPTARG}"
+      FAIL="true"
+      ;;
+    :)
+      error "Option -${OPTARG} requires an argument."
+      FAIL="true"
+      ;;
+  esac
+done
+
+[ -z "${NAME}" ] && {
+  error "Missing required parameter: -n"
+  FAIL="true"
+}
+
+if [ "${FAIL}" = "true" ]; then
+  cat <<EOM
+Usage: docker run [..] cloudpipe/keymaster selfsigned-keypair -n NAME
+
+Generate a public certificate and private key that are self-signed and unrelated to any other
+credentials you've created.
+
+ -n NAME Specify the name of the generated keypair. This is used for the filenames.
+EOM
+fi
+
+generate_selfsigned "${NAME}"
