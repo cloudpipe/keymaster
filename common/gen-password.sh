@@ -13,7 +13,7 @@ generate_password()
   # line will be used for the input password and the next line for the output password."
   cat /dev/random | head -c 128 | base64 | sed -n '{p;p;}' >> ${PASSFILE}
 
-  info "Random password created."
+  success "Random password created."
 }
 
 require_password()

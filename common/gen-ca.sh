@@ -19,7 +19,7 @@ generate_ca_certificate()
     -passout ${PASSOPT} \
     -out ${CAFILE}
 
-  info "CA certificate generated."
+  success "CA certificate generated."
 }
 
 require_ca_certificate()

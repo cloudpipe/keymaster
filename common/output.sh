@@ -13,7 +13,12 @@ _color()
 
 info()
 {
-  _color "1;34" ".." "${1}"
+  _color "1;34" ">>" "${1}"
+}
+
+success()
+{
+  _color "1;32" ".." "${1}"
 }
 
 warning()
