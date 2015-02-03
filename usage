@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Show a usage statement for the container image.
+
+cat <<EOM
+Welcome to cloudpipe/keymaster! This image can be used to generate closed networks of TLS credentials
+for use in closed, internal systems of interconnected microservices.
+
+Input and output are expected to be provided by mounting a volume to /certificates.
+
+Subcommands:
+
+ca: Generate a certificate authority.
+signed-keypair: Create a keypair that's signed by the certificate authority.
+selfsigned-keypair: Create a keypair that's self-signed and independent of the CA.
+EOM

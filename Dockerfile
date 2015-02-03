@@ -12,3 +12,5 @@ RUN chown -R hagrid:hagrid /home/hagrid
 
 USER hagrid
 WORKDIR /home/hagrid/
+
+CMD ["usage"]
