@@ -2,6 +2,8 @@
 #
 # Variables shared by common/ scripts.
 
+set -o errexit
+
 export ROOTDIR=$(cd $(dirname $0)/..; pwd)
 export CERTDIR=/certificates
 
