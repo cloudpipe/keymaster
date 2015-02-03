@@ -8,7 +8,7 @@ _color()
   local SIGIL=$2
   local MESSAGE=$3
 
-  echo "\033[${COLOR_CODE}m[${SIGIL}]\033[0m ${MESSAGE}"
+  echo -e "\033[${COLOR_CODE}m[${SIGIL}]\033[0m ${MESSAGE}"
 }
 
 info()
