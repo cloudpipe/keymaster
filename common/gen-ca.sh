@@ -28,5 +28,8 @@ generate_ca_certificate()
 
 require_ca_certificate()
 {
-  [ -f ${CAFILE} ] || generate_ca_certificate
+  if [ ! -f ${CAFILE} ]; then
+    error "Please generate a certificate authority with the 'ca' script first."
+    exit 1
+  fi
 }
