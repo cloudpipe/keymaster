@@ -8,11 +8,12 @@ done
 
 NAME=""
 PURPOSE=""
+LIFETIME=""
 HOSTNAME=""
 
 FAIL="false"
 
-while getopts ":n:p:h:" VARNAME; do
+while getopts ":n:p:l:h:" VARNAME; do
   case ${VARNAME} in
     n)
       NAME="${OPTARG}"
@@ -30,6 +31,9 @@ while getopts ":n:p:h:" VARNAME; do
           FAIL="true"
           ;;
       esac
+      ;;
+    l)
+      LIFETIME="${OPTARG}"
       ;;
     h)
       HOSTNAME="${OPTARG}"
@@ -58,20 +62,28 @@ done
 # Default to client.
 [ -z "${PURPOSE}" ] && PURPOSE="client"
 
+# Default to 365 days.
+[ -z "${LIFETIME}" ] && LIFETIME="365"
+
 if [ "${FAIL}" = "true" ]; then
   cat <<EOM
 Usage: docker run [..] cloudpipe/keymaster signed-keypair -n NAME -h HOSTNAME [-p (client|server)]"
 
 Generate a public certificate and private key signed by a private certificate authority.
 
+(Required)
  -n NAME     Specify the name of the generated keypair. This is used for the filenames.
  -h HOSTNAME Specify the hostname for the generated certificate. This must match the
              hostname that you'll be using to connect to the server.
+
+(Optional)
  -p PURPOSE  Indicate the purpose of the certificate. Must be either 'client' or 'server'.
              Defaults to 'client'.
+ -l LIFETIME Specify the duration for which this certificate should be valid, in days. Defaults to
+             365.
 EOM
 
   exit 1
 fi
 
-generate_keypair "${NAME}" "${PURPOSE}" "${HOSTNAME}"
+generate_keypair "${NAME}" "${PURPOSE}" "${LIFETIME}" "${HOSTNAME}"
