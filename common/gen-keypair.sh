@@ -20,7 +20,7 @@ generate_keypair()
   [ -f ${CERTDIR}/ca.srl ] && SERIALOPT="-CAserial ${CERTDIR}/ca.srl"
 
   local EXTOPT=""
-  [ "${PURPOSE}" = "client" ] && EXTOPT="-extfile /certificates/extclient.cnf"
+  [ "${PURPOSE}" = "client" ] && EXTOPT="-extfile ${CONFDIR}/extclient.cnf"
 
   info "Generating a CA-signed keypair for: <${NAME}>"
 
