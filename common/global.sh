@@ -4,7 +4,7 @@
 
 set -o errexit
 
-export ROOTDIR=$(cd $(dirname $0)/..; pwd)
+export ROOTDIR=$(cd $(dirname $0); pwd)
 export CONFDIR=${ROOTDIR}/conf
 export CERTDIR=/certificates
 
