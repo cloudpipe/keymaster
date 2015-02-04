@@ -6,6 +6,7 @@
 # Arguments:
 # - NAME
 # - PURPOSE, either "server" or "client"
+# - LIFETIME in days
 # - HOSTNAME
 generate_keypair()
 {
@@ -14,7 +15,8 @@ generate_keypair()
 
   local NAME=$1
   local PURPOSE=$2
-  local HOSTNAME=$3
+  local LIFETIME=$3
+  local HOSTNAME=$4
 
   local SERIALOPT="-CAcreateserial"
   [ -f ${CERTDIR}/ca.srl ] && SERIALOPT="-CAserial ${CERTDIR}/ca.srl"
@@ -38,7 +40,7 @@ generate_keypair()
     -out ${CERTDIR}/${NAME}-req.csr
 
   info ".. certificate"
-  openssl x509 -req -days 365 \
+  openssl x509 -req -days ${LIFETIME} \
     -passin ${PASSOPT} \
     -in ${CERTDIR}/${NAME}-req.csr \
     -CA ${CERTDIR}/ca.pem \

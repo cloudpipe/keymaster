@@ -8,4 +8,45 @@ for SCRIPT in common/*.sh; do
   source ${SCRIPT}
 done
 
-generate_ca_certificate
+LIFETIME=""
+
+FAIL="false"
+
+while getopts ":l:" VARNAME; do
+  case ${VARNAME} in
+    l)
+      LIFETIME="${OPTARG}"
+      ;;
+    \?)
+      error "Unrecognized option: -${OPTARG}"
+      FAIL="true"
+      ;;
+    :)
+      error "Option -${OPTARG} requires an argument."
+      FAIL="true"
+      ;;
+  esac
+done
+
+# Default to 365 days.
+[ -z "${LIFETIME}" ] && LIFETIME="365"
+
+# Default to 365 days.
+[ -z "${LIFETIME}" ] && LIFETIME="365"
+
+if [ "${FAIL}" = "true" ]; then
+  cat <<EOM
+Usage: docker run [..] cloudpipe/keymaster ca [-l LIFETIME]"
+
+Generate a private certificate authority.
+
+(Optional)
+
+ -l LIFETIME Specify the duration for which this certificate authority should be valid, in days.
+             Defaults to 365.
+EOM
+
+  exit 1
+fi
+
+generate_ca_certificate "${LIFETIME}"

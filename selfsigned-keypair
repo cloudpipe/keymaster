@@ -7,13 +7,17 @@ for SCRIPT in common/*.sh; do
 done
 
 NAME=""
+LIFETIME=""
 
 FAIL="false"
 
-while getopts ":n:" VARNAME; do
+while getopts ":n:l:" VARNAME; do
   case ${VARNAME} in
     n)
       NAME="${OPTARG}"
+      ;;
+    l)
+      LIFETIME="${OPTARG}"
       ;;
     \?)
       error "Unrecognized option: -${OPTARG}"
@@ -31,15 +35,24 @@ done
   FAIL="true"
 }
 
+# Default to 365 days.
+[ -z "${LIFETIME}" ] && LIFETIME="365"
+
 if [ "${FAIL}" = "true" ]; then
   cat <<EOM
-Usage: docker run [..] cloudpipe/keymaster selfsigned-keypair -n NAME
+Usage: docker run [..] cloudpipe/keymaster selfsigned-keypair -n NAME [-l LIFETIME]
 
 Generate a public certificate and private key that are self-signed and unrelated to any other
 credentials you've created.
 
- -n NAME Specify the name of the generated keypair. This is used for the filenames.
+(Required)
+ -n NAME     Specify the name of the generated keypair. This is used for the filenames.
+
+(Optional)
+ -l LIFETIME Specify the duration for which this certificate should be valid, in days. Defaults to
+             365.
 EOM
+  exit 1
 fi
 
-generate_selfsigned "${NAME}"
+generate_selfsigned "${NAME}" "${LIFETIME}"
