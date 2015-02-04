@@ -59,16 +59,17 @@ done
 [ -z "${PURPOSE}" ] && PURPOSE="client"
 
 if [ "${FAIL}" = "true" ]; then
-  echo
-  echo "Usage: docker run [..] cloudpipe/keymaster signed-keypair -n NAME -h HOSTNAME [-p (client|server)]"
-  echo
-  echo "Generate a public certificate and private key signed by a private certificate authority."
-  echo
-  echo " -n NAME     Specify the name of the generated keypair. This is used for the filenames."
-  echo " -p PURPOSE  Indicate the purpose of the certificate. Must be either 'client' or 'server'."
-  echo "             Defaults to 'client'."
-  echo " -h HOSTNAME Specify the hostname for the generated certificate. This must match the"
-  echo "             hostname that you'll be using to connect to the server."
+  cat <<EOM
+Usage: docker run [..] cloudpipe/keymaster signed-keypair -n NAME -h HOSTNAME [-p (client|server)]"
+
+Generate a public certificate and private key signed by a private certificate authority.
+
+ -n NAME     Specify the name of the generated keypair. This is used for the filenames.
+ -h HOSTNAME Specify the hostname for the generated certificate. This must match the
+             hostname that you'll be using to connect to the server.
+ -p PURPOSE  Indicate the purpose of the certificate. Must be either 'client' or 'server'.
+             Defaults to 'client'.
+EOM
 
   exit 1
 fi
