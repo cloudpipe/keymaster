@@ -2,9 +2,13 @@
 #
 # Generate a CA certificate.
 
+# Arguments:
+# - LIFETIME in days
 generate_ca_certificate()
 {
   require_password
+
+  local LIFETIME=$1
 
   info "Generating a CA certificate."
 
@@ -12,7 +16,7 @@ generate_ca_certificate()
     -passout ${PASSOPT} \
     -out ${CERTDIR}/ca-key.pem 2048
 
-  openssl req -new -x509 -days 365 \
+  openssl req -new -x509 -days "${LIFETIME}" \
     -batch \
     -passin ${PASSOPT} \
     -key ${CERTDIR}/ca-key.pem \
