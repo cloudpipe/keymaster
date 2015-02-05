@@ -30,7 +30,7 @@ while getopts ":n:p:l:h:s:" VARNAME; do
           PURPOSE="both"
           ;;
         *)
-          error 'Invalid purpose: must be "client" or "server".'
+          error 'Invalid purpose: must be "client", "server", or "both".'
           FAIL="true"
           ;;
       esac
