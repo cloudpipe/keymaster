@@ -13,7 +13,7 @@ HOSTNAME=""
 
 FAIL="false"
 
-while getopts ":n:p:l:h:" VARNAME; do
+while getopts ":n:p:l:h:s:" VARNAME; do
   case ${VARNAME} in
     n)
       NAME="${OPTARG}"
@@ -37,6 +37,9 @@ while getopts ":n:p:l:h:" VARNAME; do
       ;;
     h)
       HOSTNAME="${OPTARG}"
+      ;;
+    s)
+      ALTNAME="${OPTARG}"
       ;;
     \?)
       error "Unrecognized option: -${OPTARG}"
@@ -81,9 +84,12 @@ Generate a public certificate and private key signed by a private certificate au
              Defaults to 'client'.
  -l LIFETIME Specify the duration for which this certificate should be valid, in days. Defaults to
              365.
+ -s ALTNAME  Specify a subject alternative name, e.g. -s IP:192.168.0.1 (see
+             https://www.openssl.org/docs/apps/x509v3_config.html#subject_alternative_name_
+             for further possibilities and details).
 EOM
 
   exit 1
 fi
 
-generate_keypair "${NAME}" "${PURPOSE}" "${LIFETIME}" "${HOSTNAME}"
+generate_keypair "${NAME}" "${PURPOSE}" "${LIFETIME}" "${HOSTNAME}" "${ALTNAME}"

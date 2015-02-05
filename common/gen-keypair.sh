@@ -17,12 +17,22 @@ generate_keypair()
   local PURPOSE=$2
   local LIFETIME=$3
   local HOSTNAME=$4
+  local ALTNAME=$5
 
   local SERIALOPT="-CAcreateserial"
   [ -f ${CERTDIR}/ca.srl ] && SERIALOPT="-CAserial ${CERTDIR}/ca.srl"
 
   local EXTOPT=""
-  [ "${PURPOSE}" = "client" ] && EXTOPT="-extfile ${CONFDIR}/extclient.cnf"
+  if [ "${PURPOSE}" = "client" ]; then
+      cp "${CONFDIR}/extclient.cnf" "/tmp/ext.cnf"
+      EXTOPT="-extfile /tmp/ext.cnf"
+  fi
+
+  if [ ! -z "${ALTNAME}" ]; then
+      echo "" >> "/tmp/ext.cnf"
+      echo "subjectAltName=${ALTNAME}" >> "/tmp/ext.cnf"
+      EXTOPT="-extfile /tmp/ext.cnf"
+  fi
 
   info "Generating a CA-signed keypair for: <${NAME}>"
 
