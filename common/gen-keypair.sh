@@ -5,7 +5,7 @@
 
 # Arguments:
 # - NAME
-# - PURPOSE, either "server" or "client"
+# - PURPOSE, either "server", "client", or "both"
 # - LIFETIME in days
 # - HOSTNAME
 generate_keypair()
@@ -22,16 +22,19 @@ generate_keypair()
   local SERIALOPT="-CAcreateserial"
   [ -f ${CERTDIR}/ca.srl ] && SERIALOPT="-CAserial ${CERTDIR}/ca.srl"
 
+  local EXTFILE="/tmp/ext.cnf"
   local EXTOPT=""
   if [ "${PURPOSE}" = "client" ]; then
-      cp "${CONFDIR}/extclient.cnf" "/tmp/ext.cnf"
-      EXTOPT="-extfile /tmp/ext.cnf"
+      echo "extendedKeyUsage = clientAuth" >> "${EXTFILE}"
+      EXTOPT="-extfile ${EXTFILE}"
+  elif [ "${PURPOSE}" = "both" ]; then
+      echo "extendedKeyUsage = clientAuth,serverAuth" >> "${EXTFILE}"
+      EXTOPT="-extfile ${EXTFILE}"
   fi
 
   if [ ! -z "${ALTNAME}" ]; then
-      echo "" >> "/tmp/ext.cnf"
-      echo "subjectAltName=${ALTNAME}" >> "/tmp/ext.cnf"
-      EXTOPT="-extfile /tmp/ext.cnf"
+      echo "subjectAltName=${ALTNAME}" >> "${EXTFILE}"
+      EXTOPT="-extfile ${EXTFILE}"
   fi
 
   info "Generating a CA-signed keypair for: <${NAME}>"
