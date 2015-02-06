@@ -26,8 +26,11 @@ while getopts ":n:p:l:h:s:" VARNAME; do
         server)
           PURPOSE="server"
           ;;
+        both)
+          PURPOSE="both"
+          ;;
         *)
-          error 'Invalid purpose: must be "client" or "server".'
+          error 'Invalid purpose: must be "client", "server", or "both".'
           FAIL="true"
           ;;
       esac
@@ -80,7 +83,7 @@ Generate a public certificate and private key signed by a private certificate au
              hostname that you'll be using to connect to the server.
 
 (Optional)
- -p PURPOSE  Indicate the purpose of the certificate. Must be either 'client' or 'server'.
+ -p PURPOSE  Indicate the purpose of the certificate. Must be either 'client', 'server', or 'both'.
              Defaults to 'client'.
  -l LIFETIME Specify the duration for which this certificate should be valid, in days. Defaults to
              365.
